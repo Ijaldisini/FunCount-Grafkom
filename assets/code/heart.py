@@ -79,46 +79,22 @@ def draw_lives_display(ctx, cx, cy, lives=3, max_lives=3, pixel_size=10, spacing
         is_active = i < lives
         draw_pixel_heart(ctx, x, cy, pixel_size, active=is_active)
 
-surface, ctx = make_surface(128, 128)
-draw_pixel_heart(ctx, 64, 64, pixel_size=7, active=True)
-surface.write_to_png("heart_active.png")
-print("heart_active.png berhasil dibuat (128x128)")
-
-surface, ctx = make_surface(128, 128)
-draw_pixel_heart(ctx, 64, 64, pixel_size=7, active=False)
-surface.write_to_png("heart_inactive.png")
-print("heart_inactive.png berhasil dibuat (128x128)")
-
 surface, ctx = make_surface(512, 128)
 draw_lives_display(ctx, 256, 64, lives=3, max_lives=3, pixel_size=6, spacing=25)
-surface.write_to_png("lives_3.png")
+surface.write_to_png("assets/lives_3.png")
 print("lives_3.png berhasil dibuat (3 nyawa penuh)")
 
 surface, ctx = make_surface(512, 128)
 draw_lives_display(ctx, 256, 64, lives=2, max_lives=3, pixel_size=6, spacing=25)
-surface.write_to_png("lives_2.png")
+surface.write_to_png("assets/lives_2.png")
 print("lives_2.png berhasil dibuat (2 nyawa)")
 
 surface, ctx = make_surface(512, 128)
 draw_lives_display(ctx, 256, 64, lives=1, max_lives=3, pixel_size=6, spacing=25)
-surface.write_to_png("lives_1.png")
+surface.write_to_png("assets/lives_1.png")
 print("lives_1.png berhasil dibuat (1 nyawa)")
 
 surface, ctx = make_surface(512, 128)
 draw_lives_display(ctx, 256, 64, lives=0, max_lives=3, pixel_size=6, spacing=25)
-surface.write_to_png("lives_0.png")
+surface.write_to_png("assets/lives_0.png")
 print("lives_0.png berhasil dibuat (0 nyawa - game over)")
-
-surface, ctx = make_surface(64, 64)
-draw_pixel_heart(ctx, 32, 32, pixel_size=3.5, active=True)
-surface.write_to_png("heart_active_small.png")
-print("heart_active_small.png berhasil dibuat (64x64)")
-
-surface, ctx = make_surface(64, 64)
-draw_pixel_heart(ctx, 32, 32, pixel_size=3.5, active=False)
-surface.write_to_png("heart_inactive_small.png")
-print("heart_inactive_small.png berhasil dibuat (64x64)")
-
-print("\n=== Semua asset heart berhasil dibuat! ===")
-print("Gunakan heart_active.png dan heart_inactive.png untuk game")
-print("Atau gunakan lives_X.png untuk display nyawa langsung")
