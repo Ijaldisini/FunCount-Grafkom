@@ -82,19 +82,15 @@ def draw_lives_display(ctx, cx, cy, lives=3, max_lives=3, pixel_size=10, spacing
 surface, ctx = make_surface(512, 128)
 draw_lives_display(ctx, 256, 64, lives=3, max_lives=3, pixel_size=6, spacing=25)
 surface.write_to_png("assets/lives_3.png")
-print("lives_3.png berhasil dibuat (3 nyawa penuh)")
 
 surface, ctx = make_surface(512, 128)
 draw_lives_display(ctx, 256, 64, lives=2, max_lives=3, pixel_size=6, spacing=25)
 surface.write_to_png("assets/lives_2.png")
-print("lives_2.png berhasil dibuat (2 nyawa)")
 
 surface, ctx = make_surface(512, 128)
 draw_lives_display(ctx, 256, 64, lives=1, max_lives=3, pixel_size=6, spacing=25)
 surface.write_to_png("assets/lives_1.png")
-print("lives_1.png berhasil dibuat (1 nyawa)")
 
 surface, ctx = make_surface(512, 128)
 draw_lives_display(ctx, 256, 64, lives=0, max_lives=3, pixel_size=6, spacing=25)
 surface.write_to_png("assets/lives_0.png")
-print("lives_0.png berhasil dibuat (0 nyawa - game over)")
