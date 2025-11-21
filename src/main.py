@@ -10,10 +10,10 @@ pygame.display.set_caption("FunCount")
 
 # LOAD ASSETS
 
-dashboard = pygame.image.load("assets/dashboard.png").convert_alpha()
+dashboard = pygame.image.load("assets/bg_utama.png").convert_alpha()
 dashboard = pygame.transform.scale(dashboard, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
-dashboard_blur = pygame.image.load("assets/dashboard_blur.png").convert_alpha()
+dashboard_blur = pygame.image.load("assets/bg_utama_blur.png").convert_alpha()
 dashboard_blur = pygame.transform.scale(dashboard_blur, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
 welcome_img = pygame.image.load("assets/welcome.png").convert_alpha()
