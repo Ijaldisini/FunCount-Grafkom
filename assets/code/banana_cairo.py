@@ -163,4 +163,6 @@ def draw_banana(ctx, cx, cy, scale=1.0):
 # -------------------------------------------------
 surface, ctx = make_surface("banana_transparent.png")
 draw_banana(ctx, 300, 300, 1.0)
-surface.write_to_png("assets/banana_transparent.png")
+surface.write_to_png("banana_transparent.png")
+
+print("Pisang dengan background transparan berhasil dibuat -> banana_transparent.png")

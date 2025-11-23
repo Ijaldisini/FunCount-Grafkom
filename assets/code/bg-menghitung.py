@@ -120,4 +120,5 @@ ctx.stroke()
 # ============================================
 # 9. SIMPAN
 # ============================================
-blur_surface.write_to_png("assets/bg_menghitung.png")
+blur_surface.write_to_png("sunset_floral_blurred_card.png")
+print("Background dengan blur tengah berhasil dibuat!")

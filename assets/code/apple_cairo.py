@@ -197,4 +197,6 @@ def draw_apple(ctx, cx, cy, scale=1.0):
 # -------------------------------------------------
 surface, ctx = make_surface("apple_transparent.png")
 draw_apple(ctx, 300, 330, 1.3)
-surface.write_to_png("assets/apple_transparent.png")
+surface.write_to_png("apple_transparent.png")
+
+print("✨ Apel dengan background transparan berhasil dibuat -> apple_transparent.png")
