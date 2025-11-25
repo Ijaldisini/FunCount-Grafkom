@@ -70,6 +70,9 @@ def make():
     draw_symbol(ctx, "=", 1400, cy)
 
     surface.write_to_png("assets/soalPengurangan8.png")
+<<<<<<< HEAD
     print("✔ Saved soalPengurangan8.png")
 
+=======
+>>>>>>> f3a6dc9fe6435d2492eb0ebae7a079d9926325cb
 make()

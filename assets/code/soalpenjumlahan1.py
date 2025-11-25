@@ -70,5 +70,8 @@ def make():
 
     # Simpan hasil
     surface.write_to_png("assets/soalPenjumlahan1.png")
+<<<<<<< HEAD
     print("✔ Saved soalPenjumlahan1.png")
+=======
+>>>>>>> f3a6dc9fe6435d2492eb0ebae7a079d9926325cb
 make()

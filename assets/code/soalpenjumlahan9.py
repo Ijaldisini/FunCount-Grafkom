@@ -24,9 +24,15 @@ def draw_row(ctx,fn,count,cx,cy):
         fn(ctx,cx+spacing_x/2,cy-spacing_y/4,0.33)
         fn(ctx,cx-spacing_x/2,cy+spacing_y/4,0.33)
         fn(ctx,cx+spacing_x/2,cy+spacing_y/4,0.33)
+<<<<<<< HEAD
     elif count==2:
         fn(ctx,cx-spacing_x/2,cy,0.33)
         fn(ctx,cx+spacing_x/2,cy,0.33)
+=======
+    # elif count==2:
+    #     fn(ctx,cx-spacing_x/2,cy,0.33)
+    #     fn(ctx,cx+spacing_x/2,cy,0.33)
+>>>>>>> f3a6dc9fe6435d2492eb0ebae7a079d9926325cb
 
 def make():
     width,height=1700,700
@@ -44,6 +50,9 @@ def make():
     draw_symbol(ctx,"=",1550,cy)
 
     surface.write_to_png("assets/soalPenjumlahan9.png")
+<<<<<<< HEAD
     print("✔ Saved soalPenjumlahan9.png")
 
+=======
+>>>>>>> f3a6dc9fe6435d2492eb0ebae7a079d9926325cb
 make()
