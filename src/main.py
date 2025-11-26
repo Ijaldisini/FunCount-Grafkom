@@ -38,7 +38,7 @@ bg_pg = pygame.image.load("assets/bg_pengurangan.png").convert_alpha()
 bg_pg = pygame.transform.scale(bg_pg, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # =====================================
-# START BUTTON (TIDAK DIPAKAI LAGI, BOLEH DIHAPUS ASSETNYA KALAU MAU)
+# START BUTTON 
 # =====================================
 button_start_original = pygame.image.load("assets/button_start.png").convert_alpha()
 
@@ -48,6 +48,7 @@ BIG_SIZE = (300, 150)
 button_start_small = pygame.transform.scale(button_start_original, SMALL_SIZE)
 button_start_big = pygame.transform.scale(button_start_original, BIG_SIZE)
 
+# initial set to small; we'll choose big on hover in rendering
 button_start = button_start_small
 button_start_rect = button_start.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 40))
 
@@ -287,29 +288,11 @@ while running:
         # ---------------------------
         if current_state == STATE_MENU_AWAL:
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                if btn_mh_rect.collidepoint(mouse_pos):
-                    current_state = STATE_MENGHITUNG
-                    menghitung_level = 1
-
-                elif btn_pj_rect.collidepoint(mouse_pos):
-                    current_state    = STATE_PENJUMLAHAN
-                    current_pj_level = 0
-                    pj_score         = 0
-                    pj_lives         = 3
-                    pj_mistakes      = 0
-                    pj_choices       = []
-                    pj_time_start    = None
-                    pj_hover_alpha   = [0, 0, 0]
-
-                elif btn_pg_rect.collidepoint(mouse_pos):
-                    current_state    = STATE_PENGURANGAN
-                    current_pg_level = 0
-                    pg_score         = 0
-                    pg_lives         = 3
-                    pg_mistakes      = 0
-                    pg_choices       = []
-                    pg_time_start    = None
-                    pg_hover_alpha   = [0, 0, 0]
+                # hanya start button yang aktif di main menu
+                # gunakan button_start_rect (rect dikalkulasi di rendering karena bisa berubah ukuran saat hover)
+                if button_start_rect.collidepoint(mouse_pos):
+                    # masuk ke dashboard blur dengan 3 tombol
+                    current_state = STATE_DASHBOARD
 
         # ---------------------------
         # DASHBOARD (TIDAK DIPAKAI, DIBIARKAN SAJA)
@@ -443,23 +426,23 @@ while running:
     # MENU AWAL (MAIN MENU)
     # ---------------------------
     if current_state == STATE_MENU_AWAL:
+        # background biasa (dashboard)
         screen.blit(dashboard, (0, 0))
 
         # Welcome banner di atas
         screen.blit(welcome_img, welcome_rect)
 
-        # Tombol mode (hover scale)
-        btn_mh_draw = btn_mh_big if btn_mh_rect.collidepoint(mouse_pos) else btn_mh_small
-        btn_pj_draw = btn_pj_big if btn_pj_rect.collidepoint(mouse_pos) else btn_pj_small
-        btn_pg_draw = btn_pg_big if btn_pg_rect.collidepoint(mouse_pos) else btn_pg_small
+        # START button (hover scale -> small/big)
+        # pilih gambar berdasarkan hover
+        # gunakan posisi center tetap (SCREEN_WIDTH//2, SCREEN_HEIGHT//2 + 40)
+        if button_start_small.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 40)).collidepoint(mouse_pos):
+            button_start_draw = button_start_big
+        else:
+            button_start_draw = button_start_small
 
-        btn_mh_rect = btn_mh_draw.get_rect(center=(SCREEN_WIDTH // 2 - 220, 300))
-        btn_pj_rect = btn_pj_draw.get_rect(center=(SCREEN_WIDTH // 2,       300))
-        btn_pg_rect = btn_pg_draw.get_rect(center=(SCREEN_WIDTH // 2 + 220, 300))
-
-        screen.blit(btn_mh_draw, btn_mh_rect)
-        screen.blit(btn_pj_draw, btn_pj_rect)
-        screen.blit(btn_pg_draw, btn_pg_rect)
+        # recompute rect based on chosen size so collision check tetap akurat
+        button_start_rect = button_start_draw.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 40))
+        screen.blit(button_start_draw, button_start_rect)
 
     # ---------------------------
     # DASHBOARD (JARANG DIPAKAI)
@@ -467,14 +450,22 @@ while running:
     elif current_state == STATE_DASHBOARD:
         screen.blit(dashboard_blur, (0, 0))
 
+        # pilih gambar berdasarkan hover (tetap)
         btn_mh_draw = btn_mh_big if btn_mh_rect.collidepoint(mouse_pos) else btn_mh_small
         btn_pj_draw = btn_pj_big if btn_pj_rect.collidepoint(mouse_pos) else btn_pj_small
         btn_pg_draw = btn_pg_big if btn_pg_rect.collidepoint(mouse_pos) else btn_pg_small
 
-        btn_mh_rect = btn_mh_draw.get_rect(center=(SCREEN_WIDTH // 2 - 220, 300))
-        btn_pj_rect = btn_pj_draw.get_rect(center=(SCREEN_WIDTH // 2,       300))
-        btn_pg_rect = btn_pg_draw.get_rect(center=(SCREEN_WIDTH // 2 + 220, 300))
+        # ========= POSISI BARU (VERTIKAL SIMETRIS + TENGAH) =========
+        spacing = 90  # jarak antar tombol
 
+        center_x = SCREEN_WIDTH // 2
+        start_y = SCREEN_HEIGHT // 2 - spacing  # biar 3 tombol centered
+
+        btn_mh_rect = btn_mh_draw.get_rect(center=(center_x, start_y + spacing * -0.2))
+        btn_pj_rect = btn_pj_draw.get_rect(center=(center_x, start_y + spacing))
+        btn_pg_rect = btn_pg_draw.get_rect(center=(center_x, start_y + spacing * 2.2))
+
+        # gambar tombol
         screen.blit(btn_mh_draw, btn_mh_rect)
         screen.blit(btn_pj_draw, btn_pj_rect)
         screen.blit(btn_pg_draw, btn_pg_rect)
