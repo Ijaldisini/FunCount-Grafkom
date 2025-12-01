@@ -40,6 +40,23 @@ bg_pj = pygame.image.load("assets/bg_penjumlahan.png").convert_alpha()
 bg_pj = pygame.transform.scale(bg_pj, (SCREEN_WIDTH, SCREEN_HEIGHT))
 bg_pg = pygame.image.load("assets/bg_pengurangan.png").convert_alpha()
 bg_pg = pygame.transform.scale(bg_pg, (SCREEN_WIDTH, SCREEN_HEIGHT))
+maskot_normal = pygame.image.load("assets/maskot_beruang.png").convert_alpha()
+maskot_happy  = pygame.image.load("assets/maskot_happy.png").convert_alpha()
+maskot_sad    = pygame.image.load("assets/maskot_sad.png").convert_alpha()
+
+# Resize agar tidak nutup tombol
+maskot_normal = pygame.transform.scale(maskot_normal, (110, 135))
+maskot_happy  = pygame.transform.scale(maskot_happy,  (110, 135))
+maskot_sad    = pygame.transform.scale(maskot_sad,    (110, 135))
+
+# Posisi maskot
+maskot_rect = maskot_normal.get_rect(bottomleft=(20, SCREEN_HEIGHT - 110))
+
+# Current state
+current_maskot = maskot_normal
+maskot_state = "normal"
+maskot_change_time = 0
+MASKOT_DURATION = 900   # 0.9 detik
 
 # =====================================
 # START BUTTON 
@@ -216,6 +233,7 @@ pg_hover_alpha   = [0, 0, 0]
 zero_button = pygame.Surface((150, 80), pygame.SRCALPHA)
 pygame.draw.rect(zero_button, (48, 210, 80), zero_button.get_rect(), border_radius=40)
 font_zero = pygame.font.Font(None, 72)
+font_mascot = pygame.font.Font(None, 28)
 text0 = font_zero.render("0", True, (255, 255, 255))
 zero_button.blit(text0, text0.get_rect(center=zero_button.get_rect().center))
 
@@ -243,6 +261,26 @@ def generate_choices(correct):
             options.append(r)
     random.shuffle(options)
     return options
+
+def draw_mascot_text(screen, text):
+    text_surf = font_mascot.render(text, True, (80, 60, 50))
+    text_rect = text_surf.get_rect(
+        midleft=(maskot_rect.right + 15, maskot_rect.top + 30)
+    )
+    screen.blit(text_surf, text_rect)
+    
+def set_maskot_state(state):
+    global current_maskot, maskot_state, maskot_change_time
+
+    if state == "happy":
+        current_maskot = maskot_happy
+    elif state == "sad":
+        current_maskot = maskot_sad
+    else:
+        current_maskot = maskot_normal
+
+    maskot_state = state
+    maskot_change_time = pygame.time.get_ticks()
 
 def reset_penjumlahan_to_dashboard():
     global current_state, pj_score, pj_lives, pj_mistakes
@@ -358,9 +396,11 @@ while running:
                         if chosen_value == correct:
                             play_sound(sound_correct)
                             pj_score += 10
+                            set_maskot_state("happy")
                         else:
                             play_sound(sound_wrong)
                             pj_mistakes += 1
+                            set_maskot_state("sad")
                             pj_lives = max(3 - pj_mistakes, 0)
 
                         if pj_mistakes > 3:
@@ -501,6 +541,8 @@ while running:
 
     elif current_state == STATE_PENJUMLAHAN:
         screen.blit(bg_pj, (0, 0))
+        screen.blit(current_maskot, maskot_rect)
+        draw_mascot_text(screen, "Ayo semangat!")
 
         if current_pj_level >= len(jumlah_jawaban_benar):
             reset_penjumlahan_to_dashboard()
@@ -582,7 +624,8 @@ while running:
 
     elif current_state == STATE_PENGURANGAN:
         screen.blit(bg_pg, (0, 0))
-
+        screen.blit(current_maskot, maskot_rect)
+        draw_mascot_text(screen, "Kamu pasti bisa!")
         if current_pg_level >= PG_TOTAL_QUESTIONS:
             reset_pengurangan_to_dashboard()
         else:
@@ -716,4 +759,47 @@ while running:
             else:
                 reset_pengurangan_to_dashboard()
 
+
+            # ---------------------------
+    # POPUP LOSE (DENGAN ANIMASI)
+    # ---------------------------
+    elif current_state == STATE_POPUP_LOSE:
+        # Tampilkan background sesuai mode terakhir
+        if last_quiz_mode == "pj":
+            screen.blit(bg_pj, (0, 0))
+        else:
+            screen.blit(bg_pg, (0, 0))
+
+        elapsed = pygame.time.get_ticks() - popup_start_time
+        t = max(0.0, min(1.0, elapsed / POPUP_DURATION))
+        alpha = int(255 * t)
+        scale = 0.5 + 0.5 * t  # dari kecil ke besar
+
+        base_w, base_h = msg_lose_img.get_size()
+        draw_w = int(base_w * scale)
+        draw_h = int(base_h * scale)
+
+        popup_surf = pygame.transform.smoothscale(msg_lose_img, (draw_w, draw_h))
+        popup_surf.set_alpha(alpha)
+        popup_rect = popup_surf.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
+        screen.blit(popup_surf, popup_rect)
+
+        # Setelah popup selesai → balik ke menu / dashboard
+        if elapsed >= POPUP_DURATION:
+            if last_quiz_mode == "pj":
+                reset_penjumlahan_to_dashboard()
+            else:
+                reset_pengurangan_to_dashboard()
+                
+    # ---------------------------
+    # NORMALISASI EKSPRESI MASKOT
+    # ---------------------------
+    if maskot_state in ("happy", "sad"):
+        if pygame.time.get_ticks() - maskot_change_time > MASKOT_DURATION:
+            current_maskot = maskot_normal
+            maskot_state = "normal"
+
+    # ---------------------------
+    # UPDATE LAYAR
+    # ---------------------------
     pygame.display.update()
