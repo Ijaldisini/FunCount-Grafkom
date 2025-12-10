@@ -29,8 +29,8 @@ ctx.paint()
 
 # ----- SHADOW -----
 ctx.select_font_face("Arial Rounded MT Bold",
-                    cairo.FONT_SLANT_NORMAL,
-                    cairo.FONT_WEIGHT_BOLD)
+                     cairo.FONT_SLANT_NORMAL,
+                     cairo.FONT_WEIGHT_BOLD)
 ctx.set_font_size(FONT_SIZE)
 
 xbearing, ybearing, text_w, text_h, xa, ya = ctx.text_extents(TEXT)
